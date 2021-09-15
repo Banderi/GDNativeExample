@@ -102,51 +102,14 @@ GDCALLINGCONV void simple_destructor(godot_object *p_instance, void *p_method_da
 // our C string to a Godot string object, and then copy that
 // string object into the variant we are returning.
 godot_variant simple_get_data(godot_object *p_instance, void *p_method_data, void *p_user_data, int p_num_args, godot_variant **p_args) {
-
+    godot_string data;
     godot_variant ret;
+    user_data_struct *user_data = (user_data_struct *)p_user_data;
 
-    for (int i = 0; i < 10; ++i) {
-        godot_string data;
-        user_data_struct *user_data = (user_data_struct *)p_user_data;
-
-        api->godot_string_new(&data); // OK
-        api->godot_string_parse_utf8(&data, user_data->data); // OK
-
-//        api->godot_variant_new_string(&ret, &data); // <--- this leaves behind a "phantom" variant, so it needs to be destroyed!!
-//        api->godot_variant_destroy(&ret);
-
-        api->godot_variant_destroy(&ret);
-        api->godot_variant_new_string(&ret, &data);
-        api->godot_string_destroy(&data);
-    }
+    api->godot_string_new(&data);
+    api->godot_string_parse_utf8(&data, user_data->data);
+    api->godot_variant_new_string(&ret, &data);
+    api->godot_string_destroy(&data);
 
     return ret;
-
-    // ...............................................
-
-
-//    for (int i = 0; i < 20; ++i) {
-//        auto b = empty_array();
-//        API->godot_array_clear(&b);
-//        array_push_back(&b, to_variant(i));
-//        array_push_back(&arr, safe_return_array(b));
-//        free(b);
-//        API->godot_array_destroy(&b);
-
-//        array_push_back(&arr, ret);
-//    }
-
-    // ...............................................
-
-
-//	godot_string data;
-//	godot_variant ret;
-//	user_data_struct *user_data = (user_data_struct *)p_user_data;
-//
-//	api->godot_string_new(&data);
-//	api->godot_string_parse_utf8(&data, user_data->data);
-//	api->godot_variant_new_string(&ret, &data);
-//	api->godot_string_destroy(&data);
-//
-//	return ret;
 }
