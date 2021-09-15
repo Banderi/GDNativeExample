@@ -34,6 +34,7 @@ In the engine, it usually looks like failure on the `load("res://<library_res_fi
 
 This error can be very annoying since it's very opaque and requires lots of trial and error to narrow down the culprit. From my experiments, I've found a couple of possible causes:
 - Failure to run `godot_gdnative_init` and/or registration of the library's class structure
+- Incorrect spelling of the class name (e.g. "Simple" instead of "SIMPLE" `class_name` field in the .gdns file)
 - Compiling the library init code as C++ instead of C (e.g. renaming "simple.c" to "simple.cpp")
 - Inclusion and usage of incompatible C++ mechanisms, like `std::vector`
 - Invalid `extern`s which can be solved by using instead the following syntax:
